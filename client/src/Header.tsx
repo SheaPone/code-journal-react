@@ -4,7 +4,7 @@ export function Header() {
   return (
     <div>
       <nav
-        className="fixed left-0 top-0 px-4 text-white bg-indigo-600 w-full
+        className="px-4 text-white bg-indigo-600 w-full
       ">
         <ul className="flex">
           <li className="inline-block py-2 px-4">

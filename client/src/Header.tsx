@@ -13,7 +13,7 @@ export function Header() {
             </Link>
           </li>
           <li className="inline-block py-2 px-4 mt-4">
-            <Link to="/entries" className="text-white text-xl">
+            <Link to="/" className="text-white text-xl">
               Entries
             </Link>
           </li>

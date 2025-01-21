@@ -1,12 +1,21 @@
-import { FormEvent, useState } from 'react';
-import { addEntry, UnsavedEntry } from './data';
-
-/* type FormProps = {
-  img: string;
-} */
+import { FormEvent, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  addEntry,
+  readEntry,
+  UnsavedEntry,
+  Entry,
+  updateEntry,
+  removeEntry,
+} from './data';
 
 export function EntryForm() {
-  const [formData, setFormData] = useState({
+  const { entryId } = useParams();
+  const navigate = useNavigate();
+  const isEditing = entryId && entryId !== 'new';
+  const [error, setError] = useState<unknown>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState<Entry | UnsavedEntry>({
     title: '',
     photoUrl: '',
     notes: '',
@@ -16,20 +25,52 @@ export function EntryForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   function submitForm(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const inputs = structuredClone(formData) as unknown as UnsavedEntry;
-    addEntry(inputs);
     console.log('form submitted');
-    setFormData({
-      title: '',
-      photoUrl: '',
-      notes: '',
-    });
+    const inputs = structuredClone(
+      formData
+    ) as unknown as UnsavedEntry as Entry;
+    if (isEditing) {
+      updateEntry(inputs);
+    } else {
+      addEntry(inputs);
+    }
+    navigate('/');
+  }
+
+  useEffect(() => {
+    async function loadEntry(entryId: number) {
+      try {
+        const data = await readEntry(+entryId);
+        console.log(data);
+        if (data) setFormData(data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (isEditing) loadEntry(+entryId);
+  }, []);
+
+  function handleDelete() {
+    if (entryId) removeEntry(+entryId);
+    console.log('deleted entry');
+    navigate('/');
+  }
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) {
+    return (
+      <div>
+        Error Retrieving Entry :{' '}
+        {error instanceof Error ? error.message : 'Unknown Error'}
+      </div>
+    );
   }
 
   return (
@@ -80,6 +121,11 @@ export function EntryForm() {
             onChange={handleChange}></textarea>
         </div>
         <div className="button-ctn">
+          {isEditing && (
+            <button type="button" onClick={handleDelete}>
+              Delete
+            </button>
+          )}
           <button
             type="submit"
             className="float-right bg-indigo-700 text-white">

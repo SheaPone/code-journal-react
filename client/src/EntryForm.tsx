@@ -8,11 +8,13 @@ import { addEntry, UnsavedEntry } from './data';
 export function EntryForm() {
   const [formData, setFormData] = useState({
     title: '',
-    photoURL: '',
+    photoUrl: '',
     notes: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     console.log(name, value);
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -25,7 +27,7 @@ export function EntryForm() {
     console.log('form submitted');
     setFormData({
       title: '',
-      photoURL: '',
+      photoUrl: '',
       notes: '',
     });
   }
@@ -36,7 +38,7 @@ export function EntryForm() {
       <form onSubmit={submitForm}>
         <div className="img-container">
           <img
-            src={formData.photoURL || '/placeholder-image-square.jpg'}
+            src={formData.photoUrl || '/placeholder-image-square.jpg'}
             style={{ height: '300px', width: '300px', marginLeft: 50 }}
           />
         </div>
@@ -60,9 +62,9 @@ export function EntryForm() {
             </label>
             <input
               type="text"
-              value={formData.photoURL}
+              value={formData.photoUrl}
               id="photo"
-              name="photoURL"
+              name="photoUrl"
               onChange={handleChange}
             />
           </div>
@@ -75,8 +77,7 @@ export function EntryForm() {
             id="notes"
             name="notes"
             value={formData.notes}
-            // onChange={handleChange}
-          ></textarea>
+            onChange={handleChange}></textarea>
         </div>
         <div className="button-ctn">
           <button

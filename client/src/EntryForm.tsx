@@ -74,18 +74,20 @@ export function EntryForm() {
   }
 
   return (
-    <div className="container bg-gray-400 h-auto">
-      <h1>Code Journal</h1>
-      <form onSubmit={submitForm}>
-        <div className="img-container">
+    <div className="container bg-gray-400 min-h-screen h-auto">
+      <h1 className="text-black">Entry</h1>
+      <form
+        onSubmit={submitForm}
+        className="flex flex-col sm:flex-row sm:items-start">
+        <div className="img-container sm:w-1/2 sm:mr-8 mb-6 sm:mb-0 sm:ml-4 ml-6">
           <img
             src={formData.photoUrl || '/placeholder-image-square.jpg'}
-            style={{ height: '300px', width: '300px', marginLeft: 50 }}
+            style={{ height: '300px', width: '300px' }}
           />
         </div>
-        <div className="inputs">
-          <div className="mb-4">
-            <label htmlFor="title" className="mr-4">
+        <div className="inputs sm:w-1/2">
+          <div className="mb-4 mr-6 ml-6">
+            <label htmlFor="title" className="mr-4 block">
               Title
             </label>
             <input
@@ -93,12 +95,12 @@ export function EntryForm() {
               value={formData.title}
               id="title"
               name="title"
-              className=""
+              className="w-full"
               onChange={handleChange}
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="photo" className="mr-4">
+          <div className="mb-4 mr-6 ml-6">
+            <label htmlFor="photo" className="mr-4 block">
               Photo Url
             </label>
             <input
@@ -107,28 +109,33 @@ export function EntryForm() {
               id="photo"
               name="photoUrl"
               onChange={handleChange}
+              className="w-full"
             />
           </div>
+          <div className="entry-notes mb-4 mr-6 ml-6">
+            <label htmlFor="notes" className="mr-4 block">
+              Notes
+            </label>
+            <textarea
+              id="notes"
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              className="w-full"></textarea>
+          </div>
         </div>
-        <div className="entry-notes">
-          <label htmlFor="notes" className="mr-4">
-            Notes
-          </label>
-          <textarea
-            id="notes"
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}></textarea>
-        </div>
-        <div className="button-ctn">
+        <div className="button-ctn mt-60 sm:mt-0">
           {isEditing && (
-            <button type="button" onClick={handleDelete}>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="absolute bottom-20 left-20  bg-red-500 text-white p-2 rounded">
               Delete
             </button>
           )}
           <button
             type="submit"
-            className="float-right bg-indigo-700 text-white">
+            className="absolute bottom-20 right-20 bg-indigo-700 text-white p-2 rounded">
             Save
           </button>
         </div>

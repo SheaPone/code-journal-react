@@ -55,7 +55,8 @@ export function EntryForm() {
       }
     }
     if (isEditing) loadEntry(+entryId);
-  }, []);
+    else setIsLoading(false);
+  }, [entryId, isEditing]);
 
   function handleDelete() {
     if (entryId) removeEntry(+entryId);
